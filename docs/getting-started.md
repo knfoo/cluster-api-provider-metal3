@@ -9,7 +9,7 @@ This provider integrates with the
 
 The pre-requisite for the deployment of CAPM3 are the following:
 
-- Ironic up and running (inside or outside of the cluster)
+- Ironic up and running (inside or outside of the cluster) Please refere to the [inside cluster Ironic](#inside-cluster-ironic) section for more information
 - BareMetalHost resources created for all hardware nodes and in "ready" or
   "available" state
 - all cluster-related CRs (inc. BareMetalHosts and related) must be in the
@@ -379,3 +379,14 @@ and set the providerID value to BMH UUID, meaning that it is not advisable to
 directly map the K.Node <---> BMH after pivoting. However, if needed, we can
 still find the providerID value in Metal3Machine Spec. which enables us to do
 the mapping with an intermediary step, i.e K.Node <--> M3Machine <--> BMH.
+
+
+## Inside Cluster Ironic
+
+The in-cluster ironic can be deployed via the instructions in the [baremetal-operator docs](https://github.com/metal3-io/baremetal-operator/tree/master/ironic-deployment/default).
+- If you have deployed the baremetal-operator in versoin v0.3 then you will need to delete the deployment.
+- Remember to copy any changes like a PV and your MySQL secret to the new ironic deployment.
+
+**Important Note:**
+Remember the default installation is using a emptyDir: for storing data.
+If you are planing to use this installation for other things than a dev-env/playground you should change that to use a PV and the mariadb data will also need to be persisted.
