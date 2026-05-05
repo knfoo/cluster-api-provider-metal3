@@ -2740,6 +2740,9 @@ var _ = Describe("Metal3Machine manager", func() {
 			}),
 			Entry("Metadata override with InternalIP", testCaseNodeAddress{
 				M3Machine: infrav1.Metal3Machine{
+					ObjectMeta: metav1.ObjectMeta{
+						Namespace: "default",
+					},
 					Status: infrav1.Metal3MachineStatus{
 						MetaData: &corev1.SecretReference{
 							Name:      "test-metadata",
@@ -2767,6 +2770,9 @@ var _ = Describe("Metal3Machine manager", func() {
 			}),
 			Entry("Metadata override with ExternalIP", testCaseNodeAddress{
 				M3Machine: infrav1.Metal3Machine{
+					ObjectMeta: metav1.ObjectMeta{
+						Namespace: "default",
+					},
 					Status: infrav1.Metal3MachineStatus{
 						MetaData: &corev1.SecretReference{
 							Name:      "test-metadata-external",
@@ -2794,6 +2800,9 @@ var _ = Describe("Metal3Machine manager", func() {
 			}),
 			Entry("Metadata override with both InternalIP and ExternalIP", testCaseNodeAddress{
 				M3Machine: infrav1.Metal3Machine{
+					ObjectMeta: metav1.ObjectMeta{
+						Namespace: "default",
+					},
 					Status: infrav1.Metal3MachineStatus{
 						MetaData: &corev1.SecretReference{
 							Name:      "test-metadata-both",
@@ -2826,6 +2835,9 @@ var _ = Describe("Metal3Machine manager", func() {
 			}),
 			Entry("Metadata override with nil host", testCaseNodeAddress{
 				M3Machine: infrav1.Metal3Machine{
+					ObjectMeta: metav1.ObjectMeta{
+						Namespace: "default",
+					},
 					Status: infrav1.Metal3MachineStatus{
 						MetaData: &corev1.SecretReference{
 							Name:      "test-metadata-nohost",
@@ -2846,6 +2858,9 @@ var _ = Describe("Metal3Machine manager", func() {
 			}),
 			Entry("Metadata ref exists but secret missing falls back to BMH", testCaseNodeAddress{
 				M3Machine: infrav1.Metal3Machine{
+					ObjectMeta: metav1.ObjectMeta{
+						Namespace: "default",
+					},
 					Status: infrav1.Metal3MachineStatus{
 						MetaData: &corev1.SecretReference{
 							Name:      "nonexistent-secret",
@@ -2864,6 +2879,9 @@ var _ = Describe("Metal3Machine manager", func() {
 			}),
 			Entry("Metadata with no InternalIP or ExternalIP falls back to BMH", testCaseNodeAddress{
 				M3Machine: infrav1.Metal3Machine{
+					ObjectMeta: metav1.ObjectMeta{
+						Namespace: "default",
+					},
 					Status: infrav1.Metal3MachineStatus{
 						MetaData: &corev1.SecretReference{
 							Name:      "test-metadata-noop",
@@ -2885,6 +2903,9 @@ var _ = Describe("Metal3Machine manager", func() {
 			}),
 			Entry("Malformed metadata returns error", testCaseNodeAddress{
 				M3Machine: infrav1.Metal3Machine{
+					ObjectMeta: metav1.ObjectMeta{
+						Namespace: "default",
+					},
 					Status: infrav1.Metal3MachineStatus{
 						MetaData: &corev1.SecretReference{
 							Name:      "test-metadata-bad",

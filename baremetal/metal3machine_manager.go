@@ -1408,10 +1408,12 @@ func (m *MachineManager) getMetaDataFromSecret(ctx context.Context) (map[string]
 		return nil, nil //nolint:nilnil
 	}
 
+	// We do not allow cross-namespace references for MetaData, so use the
+	// Metal3Machine's own namespace and disregard any namespace on the secret ref.
 	secret := &corev1.Secret{}
 	err := m.client.Get(ctx, types.NamespacedName{
 		Name:      m.Metal3Machine.Status.MetaData.Name,
-		Namespace: m.Metal3Machine.Status.MetaData.Namespace,
+		Namespace: m.Metal3Machine.Namespace,
 	}, secret)
 	if err != nil {
 		if apierrors.IsNotFound(err) {
