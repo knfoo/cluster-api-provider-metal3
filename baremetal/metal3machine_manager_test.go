@@ -2798,6 +2798,64 @@ var _ = Describe("Metal3Machine manager", func() {
 					},
 				},
 			}),
+			Entry("Metadata override with IPv6 InternalIP", testCaseNodeAddress{
+				M3Machine: infrav1.Metal3Machine{
+					ObjectMeta: metav1.ObjectMeta{
+						Namespace: "default",
+					},
+					Status: infrav1.Metal3MachineStatus{
+						MetaData: &corev1.SecretReference{
+							Name:      "test-metadata-internal-ipv6",
+							Namespace: "default",
+						},
+					},
+				},
+				TestObjects: []runtime.Object{makeMetaDataSecret("test-metadata-internal-ipv6", "default", map[string]string{
+					"InternalIP": "fd00::100",
+				})},
+				Host: &bmov1alpha1.BareMetalHost{
+					Status: bmov1alpha1.BareMetalHostStatus{
+						HardwareDetails: &bmov1alpha1.HardwareDetails{
+							NIC: []bmov1alpha1.NIC{nic1},
+						},
+					},
+				},
+				ExpectedNodeAddresses: []clusterv1.MachineAddress{
+					{
+						Type:    clusterv1.MachineInternalIP,
+						Address: "fd00::100",
+					},
+				},
+			}),
+			Entry("Metadata override with IPv6 ExternalIP", testCaseNodeAddress{
+				M3Machine: infrav1.Metal3Machine{
+					ObjectMeta: metav1.ObjectMeta{
+						Namespace: "default",
+					},
+					Status: infrav1.Metal3MachineStatus{
+						MetaData: &corev1.SecretReference{
+							Name:      "test-metadata-external-ipv6",
+							Namespace: "default",
+						},
+					},
+				},
+				TestObjects: []runtime.Object{makeMetaDataSecret("test-metadata-external-ipv6", "default", map[string]string{
+					"ExternalIP": "2001:db8::1",
+				})},
+				Host: &bmov1alpha1.BareMetalHost{
+					Status: bmov1alpha1.BareMetalHostStatus{
+						HardwareDetails: &bmov1alpha1.HardwareDetails{
+							NIC: []bmov1alpha1.NIC{nic1},
+						},
+					},
+				},
+				ExpectedNodeAddresses: []clusterv1.MachineAddress{
+					{
+						Type:    clusterv1.MachineExternalIP,
+						Address: "2001:db8::1",
+					},
+				},
+			}),
 			Entry("Metadata override with both InternalIP and ExternalIP", testCaseNodeAddress{
 				M3Machine: infrav1.Metal3Machine{
 					ObjectMeta: metav1.ObjectMeta{
@@ -2830,6 +2888,74 @@ var _ = Describe("Metal3Machine manager", func() {
 					{
 						Type:    clusterv1.MachineExternalIP,
 						Address: "203.0.113.1",
+					},
+				},
+			}),
+			Entry("Metadata override with IPv6 InternalIP and ExternalIP", testCaseNodeAddress{
+				M3Machine: infrav1.Metal3Machine{
+					ObjectMeta: metav1.ObjectMeta{
+						Namespace: "default",
+					},
+					Status: infrav1.Metal3MachineStatus{
+						MetaData: &corev1.SecretReference{
+							Name:      "test-metadata-ipv6",
+							Namespace: "default",
+						},
+					},
+				},
+				TestObjects: []runtime.Object{makeMetaDataSecret("test-metadata-ipv6", "default", map[string]string{
+					"InternalIP": "fd00::100",
+					"ExternalIP": "2001:db8::1",
+				})},
+				Host: &bmov1alpha1.BareMetalHost{
+					Status: bmov1alpha1.BareMetalHostStatus{
+						HardwareDetails: &bmov1alpha1.HardwareDetails{
+							NIC: []bmov1alpha1.NIC{nic1},
+						},
+					},
+				},
+				ExpectedNodeAddresses: []clusterv1.MachineAddress{
+					{
+						Type:    clusterv1.MachineInternalIP,
+						Address: "fd00::100",
+					},
+					{
+						Type:    clusterv1.MachineExternalIP,
+						Address: "2001:db8::1",
+					},
+				},
+			}),
+			Entry("Metadata override with mixed IPv4 InternalIP and IPv6 ExternalIP", testCaseNodeAddress{
+				M3Machine: infrav1.Metal3Machine{
+					ObjectMeta: metav1.ObjectMeta{
+						Namespace: "default",
+					},
+					Status: infrav1.Metal3MachineStatus{
+						MetaData: &corev1.SecretReference{
+							Name:      "test-metadata-mixed",
+							Namespace: "default",
+						},
+					},
+				},
+				TestObjects: []runtime.Object{makeMetaDataSecret("test-metadata-mixed", "default", map[string]string{
+					"InternalIP": "10.0.0.100",
+					"ExternalIP": "2001:db8::1",
+				})},
+				Host: &bmov1alpha1.BareMetalHost{
+					Status: bmov1alpha1.BareMetalHostStatus{
+						HardwareDetails: &bmov1alpha1.HardwareDetails{
+							NIC: []bmov1alpha1.NIC{nic1},
+						},
+					},
+				},
+				ExpectedNodeAddresses: []clusterv1.MachineAddress{
+					{
+						Type:    clusterv1.MachineInternalIP,
+						Address: "10.0.0.100",
+					},
+					{
+						Type:    clusterv1.MachineExternalIP,
+						Address: "2001:db8::1",
 					},
 				},
 			}),
